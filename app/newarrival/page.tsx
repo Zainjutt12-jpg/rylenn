@@ -1,23 +1,34 @@
 'use client';
 import Items from "@/components/Items/pages";
-
+import { fetchDataWithParams } from "@/integration/getData";
+import { useEffect, useState } from 'react';
 
 export default function NewArrivals() {
-    const newArrivalProducts = [
-      { name: "Blood Arc", img: "https://www.awkwardxstore.com/cdn/shop/files/nyjets_football_streetwear_oversize_hoodie_awkwardxstore_pakistan_1.png?v=1731770765&width=700", price: "3500.00" ,router:'/info',id:0},
-      { name: "Blood Arc ", img: "https://www.awkwardxstore.com/cdn/shop/files/nyjets_football_streetwear_oversize_hoodie_awkwardxstore_pakistan_1.png?v=1731770765&width=700", price: "3500.00",id:1 },
-      { name: "Blood Arc", img: "https://www.awkwardxstore.com/cdn/shop/files/nyjets_football_streetwear_oversize_hoodie_awkwardxstore_pakistan_1.png?v=1731770765&width=700", price: "3500.00" ,id:2},
-      { name: "Blood Arc", img: "https://www.awkwardxstore.com/cdn/shop/files/nyjets_football_streetwear_oversize_hoodie_awkwardxstore_pakistan_1.png?v=1731770765&width=700", price: "3500.00",id:3 },
-      { name: "Blood Arc", img: "https://www.awkwardxstore.com/cdn/shop/files/nyjets_football_streetwear_oversize_hoodie_awkwardxstore_pakistan_1.png?v=1731770765&width=700", price: "3500.00" ,id:4},
-      { name: "Blood Arc ", img: "https://www.awkwardxstore.com/cdn/shop/files/nyjets_football_streetwear_oversize_hoodie_awkwardxstore_pakistan_1.png?v=1731770765&width=700", price: "3500.00" ,id:5},
-      { name: "Blood Arc", img: "https://www.awkwardxstore.com/cdn/shop/files/nyjets_football_streetwear_oversize_hoodie_awkwardxstore_pakistan_1.png?v=1731770765&width=700", price: "3500.00",id:6 },
-      { name: "Blood Arc", img: "https://www.awkwardxstore.com/cdn/shop/files/nyjets_football_streetwear_oversize_hoodie_awkwardxstore_pakistan_1.png?v=1731770765&width=700", price: "3500.00",id:7 }
+  const [products, setProducts] = useState<any[]>([]);
+  const [newArrivalProducts, setNewArrivalProducts] = useState<any[]>([]);
 
-    ];
-  
-    return (
-     <Items   title="New Arrival" 
-     products={newArrivalProducts} />
-    );
-  }
-  
+  useEffect(() => {
+    const getProducts = async () => {
+      try {
+        const data = await fetchDataWithParams<any[]>('http://127.0.0.1:8000/playground/products/', {
+          newArrivals: true
+        });
+        setProducts(data);
+        console.log(data, 'data coming');
+        
+        const transformed = data.map((d: any) => ({
+          img: d?.images?.[0] || ''
+        }));
+        setNewArrivalProducts(transformed);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
+
+    getProducts();
+  }, []);
+
+  return (
+    <Items title="New Arrival" products={newArrivalProducts} />
+  );
+}

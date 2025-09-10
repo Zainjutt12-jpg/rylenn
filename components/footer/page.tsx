@@ -1,44 +1,43 @@
 
 export default function Footer(){
     return (
-        <div className="bg-black min-h-96 w-full  rounded-t-[30px]">
-           <div className="p-16 w-full md:flex md:justify-between">
-               {/* 1st */}
-               <div className="w-full md:border-r  flex gap-x-24">
-               <div className="font-new-amsterdam tracking-wide text-white text-5xl font-bold">
-                Rylenn
-                </div>
-                <div className=" hidden md:flex text-white flex-col gap-y-8">
-                   <div className="text-2xl font-semibold">About Us</div>
-                   <p className="text-base font-light max-w-[340px] ">Rylenn is a lifestyle brand inspired by old-school aesthetics, blending vintage charm with modern minimalism. Focused on premium quality and timeless style, we craft pieces that are made to last and designed to stand out.</p>
+<footer className="bg-white text-black font-lato px-6 py-16 mt-20 border-t border-gray-200">
+  <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-16">
+    
+    {/* Paragraph Section */}
+    <div className="flex-1">
+      <h2 className="text-xl font-light mb-3 tracking-wide uppercase">About Rylenn</h2>
+      <p className="text-gray-600 text-base leading-relaxed">
+        Fashion is our language — timeless, bold, and unapologetically modern. At Rylenn, we craft stories through fabric that redefine everyday elegance.
+      </p>
+    </div>
 
-                   <h1 className="text-2xl font-semibold">Customer <br /> Support</h1>
-                   <div className="flex gap-y-2 flex-col ">
-                   <p className="text-base font-light max-w-80 text-gray-200">Privacy Policy</p>
-                   <p className="text-base font-light max-w-80 text-gray-200">Shipping Policy</p>
-                   <p className="text-base font-light max-w-80 text-gray-200">Privacy Policy</p>
-                   <p className="text-base font-light max-w-80 text-gray-200">Privacy Policy</p>
-                   <p className="text-base font-light max-w-80 text-gray-200">Customer <br /> Information</p>
+    {/* Newsletter Subscription */}
+    <div className="flex-1">
+      <h2 className="text-xl font-light mb-3 tracking-wide uppercase">Stay in the loop</h2>
+      <p className="text-gray-600 text-base mb-5">
+        Be the first to know about new drops, exclusive offers, and the stories behind our pieces.
+      </p>
+      <form className="flex flex-col sm:flex-row gap-3">
+        <input
+          type="email"
+          placeholder="Your email"
+          className="px-4 py-3 rounded-full w-full sm:w-[280px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black placeholder-gray-400 text-sm"
+        />
+        <button
+          type="submit"
+          className="bg-black text-white px-6 py-3 rounded-full text-sm font-semibold hover:bg-gray-900 transition"
+        >
+          Subscribe
+        </button>
+      </form>
+    </div>
+  </div>
 
-                   </div>
-
-                </div>
-                <div>
-
-                </div>
-
-               </div>
-            
-            {/* 2nd */}
-            <div className="md:pl-16 pt-10 md:pt-0  md:min-w-[600px] flex flex-col gap-y-4">
-                <div className="md:text-4xl text-3xl text-white font-bold">
-                  Stay in the loop with <br />  out weekly newsletter
-                </div>
-               {/* Input */}
-               {/* <Input type="email" placeholder="Email" /> */}
-            </div>
-               
-           </div>
-        </div>
+  {/* Bottom Line */}
+  <div className="mt-12 text-center text-xs text-gray-400 tracking-wider">
+    &copy; {new Date().getFullYear()} Rylenn. All rights reserved.
+  </div>
+</footer>
     )
 }

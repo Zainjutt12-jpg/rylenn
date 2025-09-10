@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Header from "./header/page";
-import Footer from "@/components/footer/page";
 
 
 export const metadata: Metadata = {
@@ -19,10 +17,8 @@ export default function RootLayout({
       <body
         className={` font-poppins antialiased`}
       >
-        <main className="flex flex-col justify-between">
-          <Header/>
+        <main className="flex flex-col h-full justify-between">
           {children}
-          <Footer/>
         </main>
       </body>
     </html>

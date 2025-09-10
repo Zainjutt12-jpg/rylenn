@@ -1,5 +1,4 @@
 'use client';
-
 import { Card, CardContent } from "@/components/ui/card";
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, ChevronsUpDown } from "lucide-react";
@@ -12,11 +11,19 @@ import {
 } from "@/components/ui/collapsible"
 import React from "react";
 import Items from "@/components/Items/pages";
-
-
+import { Header } from "@/components/header/Header";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+import Footer from "@/components/footer/page";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 
 
 export default function Info() {
+  React.useEffect(() => {
+    AOS.init({ once: true });
+  }, []);
+
   const collapsibles = [
     {
       title: 'Product Description',
@@ -46,30 +53,25 @@ export default function Info() {
 
   const productArray = [
     {
-      img: "https://www.awkwardxstore.com/cdn/shop/files/nyjets_football_streetwear_oversize_hoodie_awkwardxstore_pakistan_1.png?v=1731770765&width=700",
+      img: "/Openwork cotton knitte polo shirt  - Men _ MANGO Canada.jpg",
     },
     {
-      img: "https://www.awkwardxstore.com/cdn/shop/files/nyjets_football_streetwear_oversize_hoodie_awkwardxstore_pakistan_2.png?v=1731770765&width=700",
-    },
-    {
-      img: "https://www.awkwardxstore.com/cdn/shop/files/nyjets_football_streetwear_oversize_hoodie_awkwardxstore_pakistan_2.png?v=1731770765&width=700",
-    },
-    {
-      img: "https://www.awkwardxstore.com/cdn/shop/files/nyjets_football_streetwear_oversize_hoodie_awkwardxstore_pakistan_2.png?v=1731770765&width=700",
+      img: "/19 Best Knitted Polo Shirts 2023_ Retro-Doused Polos From Beams, Todd Snyder, and More.jpg",
     },
   ];
 
   const newArrivalProducts = [
-    { name: "Winter Collection", img: "https://www.awkwardxstore.com/cdn/shop/files/nyjets_football_streetwear_oversize_hoodie_awkwardxstore_pakistan_1.png?v=1731770765&width=700", price: "3500.00" ,router:'/info'},
-    { name: "Winter Collection ", img: "https://www.awkwardxstore.com/cdn/shop/files/nyjets_football_streetwear_oversize_hoodie_awkwardxstore_pakistan_1.png?v=1731770765&width=700", price: "3500.00" },
-    { name: "Winter Collection", img: "https://www.awkwardxstore.com/cdn/shop/files/nyjets_football_streetwear_oversize_hoodie_awkwardxstore_pakistan_1.png?v=1731770765&width=700", price: "3500.00" },
-    { name: "Winter Collection", img: "https://www.awkwardxstore.com/cdn/shop/files/nyjets_football_streetwear_oversize_hoodie_awkwardxstore_pakistan_1.png?v=1731770765&width=700", price: "3500.00" },
+    { name: "Winter Collection", img: "/shirtss.png", price: "3500.00" ,router:'/info'},
+    { name: "Winter Collection ", img: "/shirt.png", price: "3500.00" },
+    { name: "Winter Collection", img: "/shirt.png", price: "3500.00" },
+    { name: "Winter Collection", img: "/shirtss.png", price: "3500.00" },
   ];
 
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [count, setCount] = useState(0);
-
+  const [openModal, setOpenModal] = useState(false);
+  const [form, setForm] = useState({ name: "", phone: "", email: "", address: "" });
 
   const handlePrev = () => {
     setSelectedIndex((prev) =>
@@ -83,147 +85,246 @@ export default function Info() {
     );
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
   return (
-  <>
- <div className=" md:flex px-4 md:px-24 pt-10 gap-y-6 md:pb-20 w-full">
-    <div className="flex flex-col w-full md:w-[50%] gap-y-4 items-center md:items-start ">
-      {/* Main Image Carousel */}
-      <div className="relative w-[400px] md:w-[600px] h-[400px]  md:h-[500px] overflow-hidden md:mb-4">
-        <div
-          className="flex transition-transform  duration-500 ease-in-out"
-          style={{ transform: `translateX(-${selectedIndex * 100}%)` }}
-        >
-          {productArray.map((product, index) => (
-            <div key={index} className="min-w-[400px] md:min-w-[600px]">
-              <Card>
-                <CardContent className="flex aspect-square items-center  justify-center p-2 md: p-6">
-                  <img
-                    src={product.img}
-                    className="h-full w-full object-contain"
-                    alt={`product-${index}`}
-                  />
-                </CardContent>
-              </Card>
+    <>
+      <Header textColor="black" />
+      <div data-aos="fade-right" className="md:flex px-2 md:px-24 pt-10 gap-x-16 gap-y-12 md:pb-20 w-full bg-white">
+        {/* Left: Product Image Carousel */}
+        <div className="flex flex-col w-full md:w-[50%] gap-y-8 items-center md:items-start">
+          <div data-aos="fade-right" className="relative w-full max-w-[480px] md:max-w-[600px] aspect-square overflow-hidden rounded-3xl  bg-white">
+            <div
+              className="flex transition-transform duration-500 ease-in-out"
+              style={{ transform: `translateX(-${selectedIndex * 100}%)` }}
+            >
+              {productArray.map((product, index) => (
+                <div key={index} className="min-w-full">
+                  <Card className="bg-white rounded-3xl shadow-none border border-gray-100">
+                    <CardContent className="flex aspect-square items-center justify-center p-4 md:p-8">
+                      <img
+                        src={product.img}
+                        className="h-full w-full object-contain rounded-2xl"
+                        alt={`product-${index}`}
+                      />
+                    </CardContent>
+                  </Card>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-
-        {/* Custom Prev/Next buttons */}
-        <button
-          onClick={handlePrev}
-          className="absolute left-2 top-1/2 md:top-1/2 -translate-y-1/2 bg-white rounded-full p-2 shadow hover:bg-gray-100"
-        >
-          <ChevronLeft />
-        </button>
-        <button
-          onClick={handleNext}
-          className="absolute right-2 top-1/2 md:top-1/2 -translate-y-1/2 bg-white rounded-full p-2 shadow hover:bg-gray-100"
-        >
-          <ChevronRight />
-        </button>
-      </div>
-
-      {/* Thumbnails */}
-      <div className="flex gap-4  md:mt-6">
-        {productArray.map((product, index) => (
-          <div
-            key={index}
-            onClick={() => setSelectedIndex(index)}
-            className={`border-2 rounded-lg cursor-pointer transition ${
-              selectedIndex === index ? "border-black" : "border-gray-300"
-            }`}
-          >
-            <img
-              src={product.img}
-              alt={`thumbnail-${index}`}
-              className="w-24 h-24 object-contain p-1"
-            />
+            {/* Carousel Controls */}
+            <button
+              onClick={handlePrev}
+              className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/80 border border-gray-200 text-black rounded-full p-2 shadow-sm hover:bg-black hover:text-white transition"
+              aria-label="Previous"
+            >
+              <ChevronLeft size={20} />
+            </button>
+            <button
+              onClick={handleNext}
+              className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/80 border border-gray-200 text-black rounded-full p-2 shadow-sm hover:bg-black hover:text-white transition"
+              aria-label="Next"
+            >
+              <ChevronRight size={20} />
+            </button>
           </div>
-        ))}
-      </div>
-    </div>
-
-    {/* 2nd Part */}
-     <div className="flex flex-col mt-12 md:mt-0 w-full md:w-[50%] gap-y-4 py-4 px-2">
-        {/*  */}
-        <div className="md:flex flex-col md:flex-row gap-y-12 md:gap-y-0 md:justify-between">
-            {/*  */}
-            <div className="flex flex-col gap-y-8 md:gap-y-6">
-            <h1 className="font-semibold text-5xl">Hoodie Bay</h1>
-            <p className="font-extralight  text-base">Color: Slate Green</p>
-            <div className="bg-[#4E6B50] w-8 h-8 rounded-full"></div>
-            <p className="font-extralight  text-lg">Size: S</p>
-            <div className="flex gap-x-2">
-            <div className="bg-transparent rounded-md border border-[4E6B50] px-4 py-3">S</div>
-            <div className="bg-transparent rounded-md border border-[4E6B50] px-4 py-3">M</div>
-            <div className="bg-transparent rounded-md border border-[4E6B50] px-4 py-3">L</div>
-            <div className="bg-transparent rounded-md border border-[4E6B50] px-4 py-3">XL</div>
-            </div>
-            <Badge variant="outline" className="mt-2"> <span className="flex items-center justify-center gap-x-2">
-            <span className="bg-[#4E6B50] w-2 h-2 rounded-full"></span> <span>In Stock</span>
-              </span> </Badge>
-            </div>
-             {/* 2nd Part */}
-             <div className="grid gap-y-8 mt-8 md:mt-0 md:gap-y-0 grid-cols-1">
-             <span className="text-[#4E6B50] mt-2 gap-1.5 text-xl">
-              <span>2700.00</span> <span>PKR</span>
-            </span>
-            <p className="font-extralight underline  text-base">Size Chart</p>
-            
-             </div>
-        </div>
-
-        {/*  */}
-        <div className="flex items-center mt-4 gap-2">
-      <Button className=" px-6 bg-transparent text-black border border-gray-200  rounded-full h-[55px] flex items-center justify-center" onClick={() => setCount(count + 1)}>
-        + 
-      </Button>
-      <span>{count}</span>
-      <Button className="px-6 text-black bg-transparent border border-gray-200 rounded-full h-[55px] flex items-center justify-center" onClick={() => setCount(count > 0 ? count - 1 : 0)}>
-        - 
-      </Button>
-      <div className="w-[200px] md:w-[600px]">
-      <Button  className="w-full bg-black rounded-full h-[55px] flex items-center justify-center">Add to cart</Button>
-      </div>
-      
-    </div>
-      <div>
-        <Button variant={"outline"} className="w-full h-[55px]">Buy it now</Button>
-      </div>
-      <div className="space-y-4">
-      {collapsibles.map((item, index) => (
-        <Collapsible
-          key={index}
-          open={openStates[index]}
-          onOpenChange={(val) => toggleCollapsible(index, val)}
-          className="md:w-[350px] space-y-2"
-        >
-          <div className="flex mt-3 items-center justify-between space-x-4 px-2">
-            <h4 className="text-lg tracking-wide font-extralight">{item.title}</h4>
-            <CollapsibleTrigger asChild>
-              <Button variant="ghost" size="sm" className="w-9 p-0">
-                <ChevronsUpDown className="h-4 w-4 ml-5" />
-                <span className="sr-only">Toggle</span>
-              </Button>
-            </CollapsibleTrigger>
-          </div>
-
-          <CollapsibleContent className="space-y-2 px-4">
-            {item.content.map((text, idx) => (
+          {/* Thumbnails */}
+          <div data-aos="fade-right" className="flex gap-3 md:mt-4">
+            {productArray.map((product, index) => (
               <div
-                key={idx}
-                className="rounded-md border px-4 py-3 font-mono text-sm"
+                key={index}
+                onClick={() => setSelectedIndex(index)}
+                className={`border-2 rounded-xl cursor-pointer transition-all duration-200 ${selectedIndex === index ? "border-black" : "border-gray-200"}`}
+                style={{ boxShadow: selectedIndex === index ? '0 2px 8px rgba(0,0,0,0.08)' : 'none' }}
               >
-                {text}
+                <img
+                  src={product.img}
+                  alt={`thumbnail-${index}`}
+                  className="w-16 h-16 object-contain p-1 rounded-lg"
+                />
               </div>
             ))}
-          </CollapsibleContent>
-        </Collapsible>
+          </div>
+        </div>
+        {/* Right: Product Details */}
+        <div data-aos="fade-left" className="flex flex-col font-lato mt-8 md:mt-0 w-full md:w-[50%] gap-y-10 py-2 px-4 md:px-8">
+
+{/* Product Title */}
+<div className="flex flex-col gap-y-3">
+  <h1 className="text-3xl md:text-5xl font-light tracking-wide text-black">Hoodie Bay</h1>
+
+  {/* Color Selection */}
+  <div className="flex items-center gap-x-4">
+    <span className="text-gray-500 text-base">Color:</span>
+    <span className="inline-flex items-center gap-x-2">
+      <span className="bg-black w-5 h-5 rounded-full border border-gray-300"></span>
+      <span className="text-sm text-black">Slate Green</span>
+    </span>
+  </div>
+
+  {/* Size Options */}
+  <div className="flex items-center gap-x-4">
+    <span className="text-gray-500 text-base">Size:</span>
+    <div className="flex gap-x-2">
+      {['S', 'M', 'L', 'XL'].map((size) => (
+        <div
+          key={size}
+          className="px-4 py-2 rounded-full border border-gray-200 bg-white text-sm text-black cursor-pointer hover:border-black transition-all"
+        >
+          {size}
+        </div>
       ))}
     </div>
-     </div>
+  </div>
+
+  {/* Stock Badge */}
+  <div className="mt-2">
+    <Badge variant="outline" className="border border-gray-200 px-3 py-1 rounded-full text-black bg-white font-normal text-sm">
+      <span className="flex items-center gap-x-2">
+        <span className="bg-black w-2 h-2 rounded-full"></span>
+        <span>In Stock</span>
+      </span>
+    </Badge>
+  </div>
+
+  {/* Price Section */}
+  <div className="flex items-center gap-x-4 mt-3">
+    <span className="text-2xl font-medium text-black">2700.00 <span className="text-base font-normal">PKR</span></span>
+    <span className="text-sm text-gray-500 underline cursor-pointer hover:text-black transition">Size Chart</span>
+  </div>
+</div>
+
+{/* Quantity and Action Buttons */}
+<div className="flex items-center gap-4">
+  <Button className="h-11 w-11 bg-white text-black border border-gray-200 rounded-full hover:bg-black hover:text-white text-lg" onClick={() => setCount(count + 1)}>
+    +
+  </Button>
+  <span className="text-xl font-medium w-8 text-center">{count}</span>
+  <Button className="h-11 w-11 bg-white text-black border border-gray-200 rounded-full hover:bg-black hover:text-white text-lg" onClick={() => setCount(count > 0 ? count - 1 : 0)}>
+    -
+  </Button>
+  <Button className="flex-1 bg-black text-white h-11 rounded-full text-base font-semibold hover:scale-105 transition-all">
+    Add to Cart
+  </Button>
+</div>
+
+<Button
+  variant="outline"
+  className="w-full h-11 mt-2 rounded-full border border-black text-black font-medium text-base hover:bg-black hover:text-white transition-all"
+  onClick={() => setOpenModal(true)}
+>
+  Buy it now
+</Button>
+
+<Dialog open={openModal} onOpenChange={setOpenModal}>
+  <DialogContent className="w-full max-w-2xl font-lato bg-white border border-black rounded-2xl p-6">
+    <DialogHeader>
+      <DialogTitle className="text-2xl font-light text-black">Confirm Order</DialogTitle>
+    </DialogHeader>
+
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+      {/* Order Image Preview */}
+      <div className="w-full h-64 bg-gray-100 border border-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
+        <img src={'/19 Best Knitted Polo Shirts 2023_ Retro-Doused Polos From Beams, Todd Snyder, and More.jpg'} alt="Order Item" className="object-contain max-h-full" />
+      </div>
+
+      {/* Form Inputs */}
+      <div className="space-y-4">
+        {/* <p className="text-sm text-gray-700">Edit info if you want</p> */}
+        <Input
+          name="name"
+          value={form.name}
+          onChange={handleChange}
+          placeholder="Customer Name"
+          className="border border-gray-200 rounded-lg bg-white text-black"
+        />
+        <Input
+          name="phone"
+          value={form.phone}
+          onChange={handleChange}
+          placeholder="Phone"
+          className="border border-gray-200 rounded-lg bg-white text-black"
+        />
+        <Input
+          name="email"
+          value={form.email}
+          onChange={handleChange}
+          placeholder="Email Address"
+          className="border border-gray-200 rounded-lg bg-white text-black"
+        />
+        <Input
+          name="address"
+          value={form.address}
+          onChange={handleChange}
+          placeholder="Address"
+          className="border border-gray-200 rounded-lg bg-white text-black"
+        />
+        
+        {/* Payment Method */}
+        <div className="pt-2">
+          <label className="flex items-center space-x-3 text-black">
+            <input
+              type="radio"
+              name="payment"
+              value="cod"
+              checked={true}
+              readOnly
+              className="accent-black"
+            />
+            <span>Cash on Delivery</span>
+          </label>
+          <p className="text-sm text-gray-500 mt-1">
+            Online transactions will be available soon.
+          </p>
+        </div>
+      </div>
     </div>
-    <Items   title="You May Also Like"   products={newArrivalProducts} />
+
+    <DialogFooter className="mt-6 flex flex-col gap-2">
+      <Button className="w-full font-lato bg-black text-white rounded-full font-medium text-base h-12 hover:bg-gray-900 hover:scale-[1.02] transition-all duration-200">
+        Checkout — 2700 PKR
+      </Button>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
+
+{/* Collapsibles */}
+<div data-aos="fade-left" className="space-y-4 mt-6">
+  {collapsibles.map((item, index) => (
+    <Collapsible
+      key={index}
+      open={openStates[index]}
+      onOpenChange={(val) => toggleCollapsible(index, val)}
+      className="w-full border border-gray-100 rounded-xl bg-white shadow-sm"
+    >
+      <div className="flex items-center justify-between px-4 py-3 cursor-pointer">
+        <h4 className="text-sm md:text-base font-medium text-black">{item.title}</h4>
+        <CollapsibleTrigger asChild>
+          <Button variant="ghost" size="sm" className="w-9 p-0">
+            <ChevronsUpDown className="h-4 w-4 ml-5" />
+            <span className="sr-only">Toggle</span>
+          </Button>
+        </CollapsibleTrigger>
+      </div>
+      <CollapsibleContent className="space-y-2 px-4 pb-4">
+        {item.content.map((text, idx) => (
+          <div key={idx} className="rounded-md border border-gray-100 px-4 py-3 text-sm bg-gray-50 text-gray-700">
+            {text}
+          </div>
+        ))}
+      </CollapsibleContent>
+    </Collapsible>
+  ))}
+</div>
+</div>
+    </div>
+      {/* You May Also Like */}
+      <div className="">
+        <Items data-aos="fade-left" title={<span className="text-3xl md:text-5xl font-light tracking-wide text-black">You May Also Like</span>} products={newArrivalProducts} />
+      </div>
+      <Footer/>
     </>
   );
 }

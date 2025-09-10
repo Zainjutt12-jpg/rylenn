@@ -1,96 +1,95 @@
 'use client';
-import NewArrivals from "../newarrival/page";
-import Collections from "../collections/page";
-import Categories from "../categories/page";
-import { useEffect, useRef, useState } from 'react';
+import { Header } from "@/components/header/Header";
+import { Drawer, DrawerTrigger, DrawerContent } from "@/components/ui/drawer";
+import { CategoryDrawerContent } from "@/components/header/CategoryDrawerContent";
+import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+import Footer from "@/components/footer/page";
 
+const images = [
+  '/WhatsApp Image 2025-07-05 at 6.42.46 PM.jpeg','/WhatsApp Image 2025-07-05 at 6.53.31 PM.jpeg','/WhatsApp Image 2025-07-05 at 6.58.06 PM.jpeg','/WhatsApp Image 2025-07-05 at 6.42.46 PM.jpeg'
+]
 
 export default function Home() {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [hasInteracted, setHasInteracted] = useState(false);
-  const [isIOS, setIsIOS] = useState(false); // ← track in state
+  const router = useRouter();
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  // Detect iOS on client
   useEffect(() => {
-    const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent : '';
-    const iOS = /iPad|iPhone|iPod/.test(userAgent);
-    setIsIOS(iOS);
+    AOS.init({ once: true });
   }, []);
 
-  const attemptPlay = () => {
-    if (videoRef.current) {
-      videoRef.current.play()
-        .then(() => {
-          setHasInteracted(true);
-        })
-        .catch(error => {
-          console.log('Playback failed:', error);
-        });
-    }
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 5000); 
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleClick = (id: number) => {
+    router.push(`/contentcategories/${id}`);
   };
 
-  useEffect(() => {
-    if (!isIOS) {
-      attemptPlay();
-    }
-  }, [isIOS]);
-
-  useEffect(() => {
-    if (!isIOS || hasInteracted) return;
-
-    const handleInteraction = () => {
-      attemptPlay();
-      setHasInteracted(true);
-      document.removeEventListener('click', handleInteraction);
-      document.removeEventListener('touchstart', handleInteraction);
-    };
-
-    document.addEventListener('click', handleInteraction, { once: true });
-    document.addEventListener('touchstart', handleInteraction, { once: true });
-
-    return () => {
-      document.removeEventListener('click', handleInteraction);
-      document.removeEventListener('touchstart', handleInteraction);
-    };
-  }, [isIOS, hasInteracted]);
+  const handleDotClick = (index: number) => {
+    setCurrentImageIndex(index);
+  };
 
   return (
-    <div className="overflow-x-hidden">
-      <div className="md:h-[80vh] h-[40vh] w-full flex justify-center items-start md:items-center">
-        <video
-          ref={videoRef}
-          src="/ryllen.mp4"
-          autoPlay={!isIOS}
-          loop
-          muted
-          playsInline
-          controls={false}
-          webkit-playsinline="true"
-          x-webkit-airplay="allow"
-          className="w-full min-w-full h-full object-contain md:object-cover object-center [&::-webkit-media-controls]:hidden"
-          preload="metadata"
-        />
+    <div data-aos="fade-up" className="relative h-screen w-full overflow-hidden">
+      {/* Background image */}
+      <img
+        src={images[currentImageIndex]}
+        alt=""
+        className="absolute inset-0 w-full h-full object-cover object-center md:object-contain lg:object-cover z-0 transition-all duration-1000 ease-in-out"
+      />
 
-        {isIOS && !hasInteracted && (
-          <div 
-            className="absolute inset-0 flex items-center justify-center bg-black/20"
-            onClick={attemptPlay}
-          >
-            <button className="p-4 rounded-full bg-white/80">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M8 5V19L19 12L8 5Z" fill="currentColor"/>
-              </svg>
-            </button>
-          </div>
-        )}
+      {/* Transparent header on top of image */}
+      <div className="relative z-20 top-0 left-0 w-full z-10 bg-transparent">
+        <Header />
       </div>
 
-      {/* New Arrivals */}
-      <NewArrivals />
-      {/* Collections */}
-      <Collections />
-      {/* Categories */}
-      <Categories />
+      {/* Center Right Buy Now Button with Arrow */}
+      <Drawer>
+        <div className="absolute inset-y-0 right-0 flex flex-col items-end justify-center z-10 pointer-events-none w-full pr-8 md:w-1/2 md:pr-40 pt-24">
+          <div className="flex items-center gap-4">
+            {/* Stylish Arrow SVG, pointing right toward the button */}
+            <svg width="120" height="48" viewBox="0 0 120 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="pointer-events-auto">
+              <path d="M8 24H104" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="1"/>
+              <path d="M96 16L104 24L96 32" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="1"/>
+            </svg>
+            <DrawerTrigger asChild>
+              <button
+                className="pointer-events-auto px-5 py-2 md:px-10 md:py-4 border-2 border-white text-white rounded-full font-lucian text-2xl md:text-3xl font-bold shadow-lg hover:scale-105 transition-all tracking-widest"
+                style={{letterSpacing: '0.08em'}}
+              >
+                Buy Now
+              </button>
+            </DrawerTrigger>
+          </div>
+        </div>
+        <DrawerContent className="p-6 bg-white rounded-t-2xl shadow-2xl border-0">
+          <CategoryDrawerContent handleClick={handleClick} />
+        </DrawerContent>
+      </Drawer>
+
+      {/* Dot indicators */}
+      <div className="absolute bottom-8  left-1/2 transform -translate-x-1/2 z-20 flex space-x-2">
+        {images.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => handleDotClick(index)}
+            className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+              index === currentImageIndex 
+                ? 'bg-white scale-110' 
+                : 'bg-white/40 hover:bg-white/60'
+            }`}
+            aria-label={`Go to image ${index + 1}`}
+          />
+        ))}
+      
+      </div>
     </div>
   );
 }

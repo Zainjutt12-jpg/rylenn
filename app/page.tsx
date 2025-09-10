@@ -1,8 +1,8 @@
-import Link from "next/link";
+import Home from "./home/page";
 export default function Structure() {
   return (
-    <div>
-          <Link href='/home'>Home</Link>
+    <div className="h-full">
+      <Home/>
     </div>
   );
 }

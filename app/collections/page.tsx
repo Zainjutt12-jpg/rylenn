@@ -1,3 +1,4 @@
+'use client';
 import { Button } from "@/components/ui/button";
 import { FilePenLine } from "lucide-react"; // similar to icon in screenshot
 
@@ -6,7 +7,7 @@ export default function Collections() {
         <div className="py-20">
             <div className="relative w-full h-[580px] bg-black">
                 <img
-                    src="https://wallpaperaccess.com/full/9351603.jpg"
+                    src="/collection.jpg"
                     alt="err"
                     className="w-full h-full object-contain"
                 />
